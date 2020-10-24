@@ -4,18 +4,19 @@
 describe ('Regression test suite', function() {
 
     //This is  a test case
-    it('Perform valid login', function(){
+    it('TC01-Perform valid login', function(){
         cy.visit('http://localhost:3000')
         cy.title().should('include', 'Hotel')
         cy.contains('Login')
         cy.get(':nth-child(1) > input').type('tester01')
         cy.get(':nth-child(2) > input').type('GteteqbQQgSr88SwNExUQv2ydb7xuf8c')
         cy.get('.btn').click()
-        cy.contains('Tester Hotel Overview') //assertion för tester01/02?
-        //cy.get('.user > .btn').click()
+        cy.contains('Tester Hotel Overview')
+        cy.contains('tester01').should('exist') //assertion för tester01?
+        //cy.get('.user > .btn').click()//logga ut
     })
 
-    it('Create new room', function(){
+    it('TC02-Create new room', function(){
         cy.get(':nth-child(1) > .btn').click()
         cy.contains('Rooms')
         cy.get('h2 > .btn').click()
@@ -29,13 +30,72 @@ describe ('Regression test suite', function() {
         cy.get('.blue').click()
         cy.contains('Floor 2, Room 202')
         cy.get(':nth-child(3) > :nth-child(2) > .features > :nth-child(1)').contains('balcony')
+        cy.get(':nth-child(3) > .btn').click()
     })
-
-    it('Delete a room', function(){
+    it('TC03-Create new customer', function (){
+        cy.get('.blocks > :nth-child(2) > .btn').click()
+        cy.contains('Clients')
+        cy.get('h2 > .btn').click()
+        cy.contains('New Client')
+        cy.get(':nth-child(1) > input').type('Jane Doe')
+        cy.get(':nth-child(2) > input:nth-child(2)').type('jane.doe@email.com')
+        cy.get(':nth-child(3) > input').type('+46701234567')
+        cy.get('.blue').click()
+        cy.contains('Jane Doe')
+        cy.get(':nth-child(3) > .btn').click()
+    })
+    it('TC04-Create new reservation', function (){
+        cy.get(':nth-child(4) > .btn').click()
+        cy.contains('Reservations')
+        cy.get('h2 > .btn').click()
+        cy.contains('New Reservation')
+        cy.get(':nth-child(1) > input').type('2020-12-30')
+        cy.get(':nth-child(2) > input').type('2021-01-03')
+        cy.get(':nth-child(3) > select').select('3')
+        cy.get(':nth-child(4) > select').select('2')
+        cy.get('.blue').click()
+        cy.wait(1000)
+        cy.contains('Jane Doe')
+        cy.get('h1 > .router-link-active').click()
+    })
+    it('TC05-Create new bill', function (){
+        cy.get(':nth-child(3) > .btn').click()
+        cy.contains('Bills')
+        cy.get('h2 > .btn').click()
+        cy.get('input').type('8000')
+        cy.get('.blue').click()
+        cy.contains('ID: 2')
+        cy.get(':nth-child(3) > .btn').click()
+    })
+    it('TC06-Edit reservation', function (){
+        cy.get(':nth-child(4) > .btn').click()
+        cy.contains('Reservation')
+        cy.get(':nth-child(2) > .action').click()
+        cy.get('.menu > :nth-child(1)').click()
+        cy.contains('Reservation: 2')
+        cy.wait(1000)
+        cy.get(':nth-child(7) > select').select('2')
+        cy.get('.blue').click()
+        cy.wait(1000)
+        cy.contains('Bill: 2')
+        cy.get(':nth-child(3) > .btn').click()
+    })
+    it('TC07-Edit bill', function(){
+        cy.get(':nth-child(3) > .btn').click()
+        cy.contains('Bills')
+        cy.get(':nth-child(2) > .action').click()
+        cy.get('.menu > :nth-child(1)').click()
+        cy.get('.checkbox').click()
+        cy.get('.blue').click()
+        cy.get(':nth-child(2) > .paid').contains('Paid: Yes')
+        cy.get(':nth-child(3) > .btn').click()
+    })
+    it('TC08-Delete a room', function(){
+        cy.get(':nth-child(1) > .btn').click()
+        cy.contains('Rooms')
         cy.get(':nth-child(3) > .action').click()
         cy.get('.menu > :nth-child(2)').click()
         cy.contains('Floor 2, Room 202').should('not.exist')
-
+        cy.get(':nth-child(3) > .btn').click()
     })
-
 })
